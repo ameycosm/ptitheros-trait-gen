@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Offspring Traits Generator</title>
+  <style>
+    body {
+      background: linear-gradient(to bottom, #355c7d, #6c5b7b, #c06c84);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      color: #fff;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      margin-bottom: 10px;
+    }
+
+    button[type="submit"] {
+      padding: 10px 20px;
+      background-color: #355c7d;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    h2 {
+      color: #fff;
+      margin-top: 20px;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      color: #fff;
+    }
+
+    li {
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <form id="traitsForm">
+   <h1 style="color:black;">Offspring Traits Generator</h1>
+    <fieldset>
+      <legend>Parent 1 Traits:</legend>
+      <label for="parent1Trait1">Trait 1:</label>
+      <input type="text" id="parent1Trait1" placeholder="Enter trait 1" required><br>
+
+      <label for="parent1Trait2">Trait 2:</label>
+      <input type="text" id="parent1Trait2" placeholder="Enter trait 2" required><br>
+
+      <!-- Add more trait inputs for Parent 1 as needed -->
+
+    </fieldset>
+
+    <fieldset>
+      <legend>Parent 2 Traits:</legend>
+      <label for="parent2Trait1">Trait 1:</label>
+      <input type="text" id="parent2Trait1" placeholder="Enter trait 1" required><br>
+
+      <label for="parent2Trait2">Trait 2:</label>
+      <input type="text" id="parent2Trait2" placeholder="Enter trait 2" required><br>
+
+      <!-- Add more trait inputs for Parent 2 as needed -->
+
+    </fieldset>
+
+    <button type="submit">Generate Offspring Traits</button>
+
+  <h2 style="color:black;">Generated Offspring Traits:</h2>
+  <ul style="color:black;" id="offspringTraits"></ul>
+</form>
+
+  <script>
+    const traitDict = {
+        //Lefika UC
+        "Cowl Feathers": { rarity: 60 },
+        "Bloom Feathers": { rarity: 60 },
+        "Phoenix Tassels": { rarity: 60 },
+        "Ear Fluff": { rarity: 60 }, //overlap R
+        "Spine Feathers": { rarity: 60 },
+        "Plated Shoulders": { rarity: 60 },
+        "Aloe Gloves": { rarity: 60 },
+        "Tuft Feathers": { rarity: 60 },
+        "Pompous Tail": { rarity: 60 },
+        "Hawk Tail": { rarity: 60 },
+        "Fan Tail": { rarity: 60 },
+        "Bloom Tail": { rarity: 60 },
+        //Rubasyn UC
+        "E2 Ribbons": { rarity: 60 },
+        "Droopy Ears": { rarity: 60 }, //overlap L
+        "B1 Ribbons": { rarity: 60 },
+        "H1 Ribbons": { rarity: 60 },
+        "Shell Tail": { rarity: 60 },
+        "Squirrel Tail": { rarity: 60 },
+        "Wrist Latchclaw": { rarity: 60 },
+        "D1 Ribbons": { rarity: 60 },
+        "D2 Ribbons": { rarity: 60 },
+        "Ribbon-Mixed Mane": { rarity: 60 },
+        //Taroot UC
+        "Short Skull": { rarity: 60 },
+        "Short Horns": { rarity: 60 },
+        "Fangs": { rarity: 60 },
+        "Bovine Horns": { rarity: 60 },
+        "Silk Drapes": { rarity: 60 }, //overlap L,R
+        "Small Ears": { rarity: 60 },
+        "Tion Tail": { rarity: 60 },
+        "Mixed Coat": { rarity: 60 },
+        "Fur Line": { rarity: 60 },
+        "Stomach Plates": { rarity: 60 },
+        "Feline Eyes": { rarity: 60 },
+        //Lefika Rare
+        "Ear Tufts": { rarity: 40 }, //overlap R
+        "Feathered Ears": { rarity: 40 },
+        "Short Ears": { rarity: 40 }, //overlap R
+        "Plated Thighs": { rarity: 40 }, //overlap R
+        "Pheonix Tail": { rarity: 40 },
+        "Wolf Tail": { rarity: 40 }, //overlap T
+        "Paradise Feathers": { rarity: 40 },
+        "Curly Fur/Feathers": { rarity: 40 }, //overlap T, R
+        "Naturally Hairless": { rarity: 40 },
+        "Stone Piebald": { rarity: 40 },
+        //Rubasyn Rare
+        "E3 Ribbons": { rarity: 40 },
+        "Royal Ribbons": { rarity: 40 },
+        "S1 Ribbons": { rarity: 40 },
+        "B2 Ribbons": { rarity: 40 },
+        "Long Fur": { rarity: 40 },
+        "Four Toes": { rarity: 40 },
+        "Rat Tail": { rarity: 40 },
+        "Streamer Tail": { rarity: 40 },
+        "Crocodile Tail": { rarity: 40 },
+        "Coil Ribbons": { rarity: 40 },
+        "Shape Ribbons": { rarity: 40 },
+        "E4 Ribbons": { rarity: 40 },
+        "Extra Altitude Slits": { rarity: 40 },
+        "Kite Webbing": { rarity: 40 },
+        //Taroot Rare
+        "Croc Horns": { rarity: 40 },
+        "Dragon Horns": { rarity: 40 },
+        "Goat Eyes": { rarity: 40 },
+        "Mandibles": { rarity: 40 },
+        "Circle Eyes": { rarity: 40 },
+        "Halo Horns": { rarity: 40 },
+        "Rhino Skull": { rarity: 40 },
+        "Fur Cape": { rarity: 40 },
+        "Fern Tassels": { rarity: 40 },
+        "Bone Spikes": { rarity: 40 },
+        "Tarantula Bristles": { rarity: 40 },
+        "Messy Tail": { rarity: 40 },
+        "Wasp Stinger": { rarity: 40 },
+    
+
+    };
+
+    const form = document.getElementById('traitsForm');
+    const offspringTraitsList = document.getElementById('offspringTraits');
+
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const parent1Traits = collectTraits('parent1');
+      const parent2Traits = collectTraits('parent2');
+
+      const offspringTraits = generateOffspringTraits(parent1Traits, parent2Traits);
+      displayOffspringTraits(offspringTraits);
+    });
+
+    function collectTraits(parent) {
+      const traits = [];
+      const traitInputs = document.querySelectorAll(`input[id^="${parent}Trait"]`);
+      traitInputs.forEach((input) => {
+        if (input.value.trim() !== '') {
+          traits.push(input.value.trim());
+        }
+      });
+      return traits;
+    }
+
+    function generateOffspringTraits(parent1Traits, parent2Traits) {
+      const offspringTraits = [];
+
+      parent1Traits.forEach((trait) => {
+        if (Math.random() * 100 < traitDict[trait].rarity) {
+          offspringTraits.push(trait);
+        }
+      });
+
+      parent2Traits.forEach((trait) => {
+        if (Math.random() * 100 < traitDict[trait].rarity) {
+          offspringTraits.push(trait);
+        }
+      });
+
+      return offspringTraits;
+    }
+
+    function displayOffspringTraits(offspringTraits) {
+      offspringTraitsList.innerHTML = '';
+      offspringTraits.forEach((trait) => {
+        const li = document.createElement('li');
+        li.textContent = trait;
+        offspringTraitsList.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>
+
